@@ -7,12 +7,70 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-hrXZnC7dJhKPR7Zxdmrt2d/6hsJO9X9iO4l+vggj0XFezHdw+hwkFmimHQ7rs2PMjP2mDF03K9CzZMdx0aKczA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-circular-gauge.min.js"></script>
+    <link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css" type="text/css" rel="stylesheet">
+    <link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <title>Weather Data</title>
+    <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            fetch('https://api.openweathermap.org/data/2.5/weather?lat=2.977007&lon=101.733376')
+                .then(response => response.json())
+                .then(data => {
+                    const pressureData = [
+                        ['Year', 'Pressure'],
+                        ['Now', data.main.pressure]
+                    ];
+
+                    const chartData = google.visualization.arrayToDataTable(pressureData);
+
+                    const options = {
+                        title: 'Pressure Chart',
+                        curveType: 'function',
+                        legend: { position: 'bottom' }
+                    };
+
+                    const chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+                    chart.draw(chartData, options);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+
 
 
     <title>Weather Data</title>
 </head>
 <body>
+
+
     <h1>VANTAGE PRO 2 WEATHER MONITORING</h1>
+
+
+    <button onclick="location.href='/historical'" type="button" style="position: absolute; top: 10px; right: 10px;">Historical Data</button>
+
+
+
+
     <h2>Located at TA, UNITEN</h2>
 
 
@@ -23,71 +81,211 @@
 
     <h2 class="outdoor">Outdoor</h2>
 
+    <h2 class="barometric">Barometric Pressure</h2>
+
+    <h2 class="feelslike">Feels Like</h2>
 
 
 
-
-
-
-    <div id="container3">
-        <div id="pressure_text"></div>
-        <div id="gauge_div2"></div>
+    <div id="battery-container">
+        <i id="battery-icon" class="fas fa-battery-full"></i>
+        <span id="battery-status">Loading...</span>
     </div>
 
-   <div id="container1">
-    <div id="temperature-wrapper">
-        <p>Temperature: <span id="temperature">...</span></p>
-        <div id="temperature_gauge"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Fetch the battery status and update the UI
+        $(document).ready(function () {
+            $.get('/battery-status', function (data) {
+                var batteryStatus = data.trim();
+                var batteryIcon = $('#battery-icon');
+                var batteryStatusElement = $('#battery-status');
+
+                if (batteryStatus === 'Full') {
+                    batteryIcon.removeClass().addClass('fas fa-battery-full');
+                } else if (batteryStatus === 'Half') {
+                    batteryIcon.removeClass().addClass('fas fa-battery-half');
+                } else if (batteryStatus === 'Empty') {
+                    batteryIcon.removeClass().addClass('fas fa-battery-empty');
+                }
+
+                batteryStatusElement.text(batteryStatus);
+            });
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+    <style>
+        @keyframes moveSun {
+            0% {
+                top: 10px;
+                left: 10px;
+            }
+
+            50% {
+                top: 200px;
+                left: 400px;
+            }
+
+            100% {
+                top: 10px;
+                left: 10px;
+            }
+        }
+
+        .sun-container {
+            position: absolute;
+            right: 200px;
+            margin-top: 600px;
+            margin-right: 100px;
+        }
+    </style>
+
+    <div class="sun-container">
+        <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
     </div>
-</div>
 
-<div id="container2">
-    <div id="humidity-wrapper">
-        <p>Humidity: <span id="humidity">...</span></p>
-        <div id="humidity_gauge"></div>
+
+
+    <div id="sunrise-sunset-container">
+        <div id="sunrise" class="weather-info">
+            <p>Sunrise: <span id="sunrise-time">Loading...</span></p>
+        </div>
+
+        <div id="sunset" class="weather-info">
+            <p>Sunset: <span id="sunset-time">Loading...</span></p>
+        </div>
     </div>
-</div>
 
-<div id="container3">
-    <div id="pressure-wrapper">
-        <p>Pressure: <span id="pressure">...</span></p>
-        <div id="pressure_gauge"></div>
+
+
+
+
+
+
+
+    <div id="datetime-container">
+        <p id="clock" class="clock"></p>
+        <p id="date" class="date"></p>
     </div>
-</div>
 
-<div id="container4">
-    <div id="dew-wrapper">
-        <p>Dew Point: <span id="dew_point">...</span></p>
-        <div id="dew_gauge"></div>
+
+
+
+
+
+
+    <div id="container1">
+        <div id="temperature-wrapper">
+            <p>Temperature: <span id="temperature">...</span></p>
+            <div id="temperature_gauge"></div>
+        </div>
     </div>
-</div>
 
-<div id="container5">
-    <div id="wet-wrapper">
-        <p>Wet Bulb: <span id="wet_bulb">...</span></p>
-        <div id="wet_gauge"></div>
+    <div id="container2">
+        <div id="humidity-wrapper">
+            <p>Humidity: <span id="humidity">...</span></p>
+            <div id="humidity_gauge"></div>
+        </div>
     </div>
-</div>
+
+
+    <div id="container3" style="display: none;">
+        <div id="pressure-wrapper">
+            <p>Pressure: <span id="pressure">...</span></p>
+            <div id="pressure_gauge"></div>
+        </div>
+    </div>
 
 
 
+    <div id="container4">
+        <div id="dew-wrapper">
+            <p>Dew Point: <span id="dew_point">...</span></p>
+            <div id="dew_gauge"></div>
+        </div>
+    </div>
+
+    <div id="container5">
+        <div id="wet-wrapper">
+            <p>Wet Bulb: <span id="wet_bulb">...</span></p>
+            <div id="wet_gauge"></div>
+        </div>
+    </div>
+
+    <div id="container7">
+        <div id="pressure-wrapper">
+            <p>Pressure: <span id="pressure_text">...</span></p>
+            <div id="gauge_div_pressure"></div>
+        </div>
+    </div>
+
+
+    <div id="container10">
+        <p id="temperature_text"></p>
+        <div id="gauge_div"></div>
+    </div>
+
+
+    <div id="container11">
+        <div id="heat-wrapper">
+            <p>Heat Index: <span id="heat_index">...</span></p>
+            <div id="heat_gauge"></div>
+        </div>
+    </div>
+
+
+    <div id="container12">
+        <div id="wind-wrapper">
+            <p>Wind Chill: <span id="wind_chill">...</span></p>
+            <div id="wind_gauge"></div>
+        </div>
+    </div>
+
+    <div id="container13">
+        <div id="thw-wrapper">
+            <p>THW Index: <span id="thw_index">...</span></p>
+            <div id="thw_gauge"></div>
+        </div>
+    </div>
+
+
+
+
+    <div id="chartContainer">
+        <canvas id="pressureChart" width="300" height="200"></canvas>
+    </div>
+
+    <div id="chartContainer1">
+        <canvas id="temperatureChart" width="300" height="200"></canvas>
+    </div>
 
     <div class="rectangle"></div>
 
+    <div class="rectangle2"></div>
+
     <div class="vertical_rectangle"></div>
 
-
-
-
-
-    <p>Heat Index: <span id="heat_index">...</span></p>
-    <div id="heat_gauge"></div>
-
-
-
-
-    <p>Wind Chill: <span id="wind_chill">...</span></p>
-    <div id="wind_chill_gauge"></div>
+    <div class="vertical_rectangle2"></div>
 
 
 
@@ -96,13 +294,38 @@
 
 
 
+    <span class="cloud-icon" style="font-size: 64px; color: #ffffff;">
+        <i class="fa fa-cloud"></i>
+    </span>
 
 
 
+    <div class="cloudy">
+        <div id="cloudy">
+            <p>Cloud Coverage: <span id="cloud-coverage">Loading...</span>%</p>
+        </div>
+    </div>
+
+
+    <script>
+        // Fetch the weather data from the API
+        fetch('https://api.openweathermap.org/data/2.5/weather?lat=2.977007&lon=101.733376&appid=2917ab3f70f94f881d8a1b5dff4039d6')
+            .then(response => response.json())
+            .then(data => {
+                // Extract the cloud coverage value from the data
+                const cloudCoverage = data.clouds.all;
+
+                // Update the HTML element with the cloud coverage value
+                document.getElementById('cloud-coverage').textContent = cloudCoverage;
+            })
+            .catch(error => {
+                console.error('Error fetching weather data:', error);
+            });
+    </script>
 
 
 
-
+   
 
 
 
@@ -122,7 +345,8 @@
             drawDewChart();
             drawWetChart();
             drawHeatChart();
-            drawWindChillChart();
+            drawWindChart();
+            drawThwChart();
         }
 
         function drawTemperatureChart() {
@@ -142,6 +366,7 @@
                 minorTicks: 5,
                 min: 0,
                 max: 60,
+
             };
 
             var temperatureChart = new google.visualization.Gauge(document.getElementById('temperature_gauge'));
@@ -264,8 +489,8 @@
             ]);
 
             var heatOptions = {
-                width: 400,
-                height: 120,
+                width: 450,
+                height: 160,
                 redFrom: 50,
                 redTo: 60,
                 yellowFrom: 40,
@@ -283,26 +508,24 @@
 
 
 
-
-        function drawWindChillChart() {
-            var windChillData = google.visualization.arrayToDataTable([
+        function drawWindChart() {
+            var windData = google.visualization.arrayToDataTable([
                 ['Label', 'Value'],
                 ['Wind Chill', 0]
             ]);
 
-            var windChillOptions = {
-                width: 400,
-                height: 120,
-                redFrom: -50,
-                redTo: -40,
-                yellowFrom: -40,
-                yellowTo: -30,
-                minorTicks: 5
+            var windOptions = {
+                width: 450,
+                height: 160,
+
+                minorTicks: 5,
+                min: 0,
+                max: 60
             };
 
-            var windChillChart = new google.visualization.Gauge(document.getElementById('wind_chill_gauge'));
+            var windChart = new google.visualization.Gauge(document.getElementById('wind_gauge'));
 
-            windChillChart.draw(windChillData, windChillOptions);
+            windChart.draw(windData, windOptions); // Use heatOptions variable
         }
 
 
@@ -310,62 +533,217 @@
 
 
 
-google.charts.load('current', { 'packages': ['gauge'] });
-google.charts.setOnLoadCallback(drawChart);
 
-function drawChart() {
-    // assuming the gauge element has an ID of 'gauge_div'
-    var gaugeElement = document.getElementById('gauge_div2');
-    var textElement = document.getElementById('pressure_text');
+        function drawThwChart() {
+            var thwData = google.visualization.arrayToDataTable([
+                ['Label', 'Value'],
+                ['THW Index', 0]
+            ]);
 
-    // create the gauge object
-    var gauge = new google.visualization.Gauge(gaugeElement);
+            var thwOptions = {
+                width: 450,
+                height: 160,
+                redFrom: 50,
+                redTo: 60,
+                yellowFrom: 40,
+                yellowTo: 50,
+                minorTicks: 5,
+                min: 0,
+                max: 60
+            };
 
-    // set the options for the gauge
-    var options = {
-        width: 400,
-        height: 120,
-        redFrom: 90,
-        redTo: 100,
-        minorTicks: 5,
-        min: 0,
-        max: 100
-    };
+            var thwChart = new google.visualization.Gauge(document.getElementById('thw_gauge'));
 
-    function updateData() {
-        // create the gauge object
-        var gauge = new google.visualization.Gauge(gaugeElement);
+            thwChart.draw(thwData, thwOptions); // Use heatOptions variable
+        }
 
-        // fetch the weather data
-        fetch('https://api.openweathermap.org/data/2.5/weather?lat=2.977007&lon=101.733376&appid=2917ab3f70f94f881d8a1b5dff4039d6')
-            .then(response => response.json())
-            .then(data => {
-                // handle the weather data
-                // update the gauge value with the pressure
-                var pressure = data.main.pressure;
-                var pressureInHg = pressure * 0.02953; // Convert hPa to inHg
-                var gaugeData = google.visualization.arrayToDataTable([
-                    ['Label', 'Value'],
-                    ['Pressure', {v: pressureInHg, f: pressureInHg.toFixed(2) + ' inHg'}]
-                ]);
-                gauge.draw(gaugeData, options);
 
-                // update the text element with the pressure value
-                textElement.textContent = 'Pressure: ' + pressureInHg.toFixed(2) + ' inHg';
-            })
-            .catch(error => {
-                console.error('Error fetching weather data:', error);
-            });
-    }
 
-    // call updateData() initially
-    updateData();
 
-    // call updateData() every 3 minutes
-    setInterval(updateData, 180000);
-}
+
+
+
+
+
+
+        google.charts.load('current', { 'packages': ['gauge'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            // assuming the gauge element has an ID of 'gauge_div'
+            var gaugeElement = document.getElementById('gauge_div2');
+            var textElement = document.getElementById('pressure_text');
+
+            // create the gauge object
+            var gauge = new google.visualization.Gauge(gaugeElement);
+
+            // set the options for the gauge
+            var options = {
+                width: 400,
+                height: 120,
+                redFrom: 90,
+                redTo: 100,
+                minorTicks: 5,
+                min: 0,
+                max: 100
+            };
+
+            function updateData() {
+                // create the gauge object
+                var gauge = new google.visualization.Gauge(gaugeElement);
+
+                // fetch the weather data
+                fetch('https://api.openweathermap.org/data/2.5/weather?lat=2.977007&lon=101.733376&appid=2917ab3f70f94f881d8a1b5dff4039d6')
+                    .then(response => response.json())
+                    .then(data => {
+                        // handle the weather data
+                        // update the gauge value with the pressure
+                        var pressure = data.main.pressure;
+                        var pressureInHg = pressure * 0.02953; // Convert hPa to inHg
+                        var gaugeData = google.visualization.arrayToDataTable([
+                            ['Label', 'Value'],
+                            ['Pressure', { v: pressureInHg, f: pressureInHg.toFixed(2) + ' inHg' }]
+                        ]);
+                        gauge.draw(gaugeData, options);
+
+                        // update the text element with the pressure value
+                        textElement.textContent = 'Pressure: ' + pressureInHg.toFixed(2) + ' inHg';
+                    })
+                    .catch(error => {
+                        console.error('Error fetching weather data:', error);
+                    });
+            }
+
+            // call updateData() initially
+            updateData();
+
+            // call updateData() every 3 minutes
+            setInterval(updateData, 180000);
+        }
+
+
+
+
+
+
+        google.charts.load('current', { 'packages': ['gauge'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var gaugeElement = document.getElementById('gauge_div');
+            var textElement = document.getElementById('temperature_text');
+
+            var gauge = new google.visualization.Gauge(gaugeElement);
+
+            var options = {
+                width: 450,
+                height: 160,
+                redFrom: 90,
+                redTo: 100,
+                minorTicks: 5,
+                min: 0,
+                max: 100
+            };
+
+            function updateData() {
+                var gauge = new google.visualization.Gauge(gaugeElement);
+
+                fetch('https://api.openweathermap.org/data/2.5/weather?lat=2.977007&lon=101.733376&appid=2917ab3f70f94f881d8a1b5dff4039d6')
+                    .then(response => response.json())
+                    .then(data => {
+                        var temperatureKelvin = data.main.temp;
+                        var temperatureCelsius = temperatureKelvin - 273.15;
+                        var gaugeData = google.visualization.arrayToDataTable([
+                            ['Label', 'Value'],
+                            ['Temperature', { v: temperatureCelsius, f: temperatureCelsius.toFixed(2) + ' °C' }]
+                        ]);
+                        gauge.draw(gaugeData, options);
+
+                        textElement.textContent = 'Temperature: ' + temperatureCelsius.toFixed(2) + ' °C';
+                    })
+                    .catch(error => {
+                        console.error('Error fetching weather data:', error);
+                    });
+            }
+
+            updateData();
+
+            setInterval(updateData, 180000);
+        }
+
+
+
+        google.charts.load('current', { 'packages': ['gauge'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var gaugeElement = document.getElementById('gauge_div');
+            var textElement = document.getElementById('temperature_text');
+            var gauge = new google.visualization.Gauge(gaugeElement);
+            var options = {
+                width: 450,
+                height: 160,
+                redFrom: 90,
+                redTo: 100,
+                minorTicks: 5,
+                min: 0,
+                max: 100
+            };
+
+            var gaugeElementPressure = document.getElementById('gauge_div_pressure');
+            var textElementPressure = document.getElementById('pressure_text');
+            var gaugePressure = new google.visualization.Gauge(gaugeElementPressure);
+            var optionsPressure = {
+                width: 450,
+                height: 160,
+                redFrom: 1000,
+                redTo: 1100,
+                minorTicks: 5,
+                min: 900,
+                max: 1100
+            };
+
+            function updateData() {
+                fetch('https://api.openweathermap.org/data/2.5/weather?lat=2.977007&lon=101.733376&appid=2917ab3f70f94f881d8a1b5dff4039d6')
+                    .then(response => response.json())
+                    .then(data => {
+                        var temperatureKelvin = data.main.temp;
+                        var temperatureCelsius = temperatureKelvin - 273.15;
+                        var pressure = data.main.pressure;
+
+                        var temperatureGaugeData = google.visualization.arrayToDataTable([
+                            ['Label', 'Value'],
+                            ['Temperature', { v: temperatureCelsius, f: temperatureCelsius.toFixed(2) + ' °C' }]
+                        ]);
+                        gauge.draw(temperatureGaugeData, options);
+                        textElement.textContent = 'Temperature: ' + temperatureCelsius.toFixed(2) + ' °C';
+
+                        var pressureGaugeData = google.visualization.arrayToDataTable([
+                            ['Label', 'Value'],
+                            ['Pressure', { v: pressure, f: pressure + ' hPa' }]
+                        ]);
+                        gaugePressure.draw(pressureGaugeData, optionsPressure);
+                        textElementPressure.textContent = pressure + ' hPa';
+                    })
+                    .catch(error => {
+                        console.error('Error fetching weather data:', error);
+                    });
+            }
+
+            updateData();
+
+            setInterval(updateData, 180000);
+        }
+
 
     </script>
+
+
+
+
+
+
+
 
 
 </body>

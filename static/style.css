@@ -5,8 +5,9 @@ body {
     height: 100vh;
     font-family: "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif;
     color: #fff;
-    position: relative; /* Add this if it's not already there */
+    position: relative;
 }
+
     body::after {
         content: "";
         display: block;
@@ -35,14 +36,11 @@ body {
     }
 }
 
-
-h1, h2 {
+h1,
+h2 {
     text-align: center;
+
 }
-
-
-
-
 
 #wind_chill_gauge {
     width: 200px;
@@ -89,269 +87,336 @@ h1, h2 {
     }
 }
 
-
 .indoor {
-    margin-top: 50px;
+    margin-top: 20px;
     font-size: 3rem;
     animation-name: glow;
     animation-duration: 1s;
     animation-iteration-count: infinite;
     animation-direction: alternate;
-}
-
-@keyframes glow {
-    from {
-        text-shadow: 0px 0px 5px #fff,0px 0px 5px #614ad3;
-    }
-
-    to {
-        text-shadow: 0px 0px 20px #fff,0px 0px 20px #614ad3;
-    }
-}
-
-
-
-#gauge_div {
-
-
-
-
-}
-
-
-
-
-#container1 {
-    position: absolute;
-    align-items: center;
-    margin-left: 50px;
-}
-
-
-#container2 {
-    position: absolute;
-    align-items: center;
-    margin-left: 350px;
-}
-
-
-
-#container3 {
-    position: absolute;
-    align-items: center;
-    margin-left: 650px;
-}
-
-
-#container4 {
-    position: absolute;
-    align-items: center;
-    margin-left: 950px;
-}
-
-
-#container5 {
-    position: absolute;
-    align-items: center;
-    margin-left: 1250px;
-}
-
-
-
-.rectangle {
-    height: 1.2px;
-    width: 1470px;
-    margin-left: 20px;
-    background-color:aliceblue;
-    position: absolute;
-    margin-top: 240px;
-}
-
-body {
-    background: linear-gradient(-45deg, #51037f, #413D45, #51037f, #000000, #353535, #000000, #51037f);
-    background-size: 400% 400%;
-    animation: gradient 6s ease infinite;
-    height: 100vh;
-    font-family: "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif;
-    color: #fff;
-    position: relative; /* Add this if it's not already there */
-}
-    body::after {
-        content: "";
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: 100000;
-        background-image: linear-gradient(0deg, transparent 24px, rgba(0, 0, 0, 0.1) 25px, transparent 26px);
-        background-size: 100% 50px;
-    }
-
-@keyframes gradient {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-
-h1, h2 {
-    text-align: center;
-}
-
-
-
-
-
-#wind_chill_gauge {
-    width: 200px;
-    height: 200px;
-    margin: 0 auto;
-    position: relative;
-}
-
-    #wind_chill_gauge:before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        display: block;
-        width: 80%;
-        height: 80%;
-        border-radius: 50%;
-        border: 20px solid #eee;
-    }
-
-    #wind_chill_gauge:after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        display: block;
-        width: 80%;
-        height: 80%;
-        border-radius: 50%;
-        border: 20px solid transparent;
-        border-top-color: #00ffff;
-        animation: spin 2s linear infinite;
-    }
-
-@keyframes spin {
-    0% {
-        transform: translate(-50%, -50%) rotate(0deg);
-    }
-
-    100% {
-        transform: translate(-50%, -50%) rotate(360deg);
-    }
-}
-
-
-.indoor {
-    margin-top: 50px;
-    font-size: 3rem;
-    animation-name: glow;
-    animation-duration: 1s;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-
+    margin-left: -960px;
 }
 
 .outdoor {
     position: absolute;
-    top: 280px;
-    transform: translateX(-50%);
-    font-size: 2rem;
+    margin-top: -100px;
+    font-size: 3rem;
     animation-name: glow;
     animation-duration: 1s;
     animation-iteration-count: infinite;
     animation-direction: alternate;
-    margin-top: 280px;
-    margin-left: 340px;
+    margin-left: 970px;
+}
+
+.barometric {
+    position: absolute;
+    top: 280px;
+    transform: translateX(-50%);
+    font-size: 3rem;
+    animation-name: glow;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    margin-top: 220px;
+    margin-left: 320px;
+}
+
+.feelslike {
+    position: absolute;
+    margin-top: -100px;
+    font-size: 3rem;
+    animation-name: glow;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    margin-left: 970px;
+    margin-top: 270px;
 }
 
 @keyframes glow {
     from {
-        text-shadow: 0px 0px 5px #fff,0px 0px 5px #614ad3;
+        text-shadow: 0px 0px 5px #fff, 0px 0px 5px #614ad3;
     }
 
     to {
-        text-shadow: 0px 0px 20px #fff,0px 0px 20px #614ad3;
+        text-shadow: 0px 0px 20px #fff, 0px 0px 20px #614ad3;
     }
 }
 
-
-
-
-
-
-
 #container1 {
     position: absolute;
+    top: 100px;
+    left: 50px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    margin-left: 50px;
+    margin-top: 100px;
 }
 
 #container2 {
     position: absolute;
+    top: 100px;
+    left: 300px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    margin-left: 350px;
+    margin-top: 100px;
+    margin-left: 75px;
 }
 
 #container3 {
-    position: absolute;
-    align-items: center;
-    margin-left: 650px;
+    display: none;
+    position: relative;
+    margin-top: 150px;
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
 }
 
 #container4 {
     position: absolute;
+    top: 100px;
+    left: 850px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    margin-left: 950px;
+    margin-top: 100px;
 }
 
 #container5 {
     position: absolute;
+    top: 100px;
+    left: 1070px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    margin-left: 1250px;
+    margin-top: 100px;
+}
+
+#container7 {
+    position: absolute;
+    top: 100px;
+    left: 630px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
+}
+
+#container10 {
+    position: absolute;
+    top: 100px;
+    left: 1290px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
+}
+
+
+#container11 {
+    position: absolute;
+    top: 100px;
+    left: 1290px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 470px;
+}
+
+#container11 {
+    position: absolute;
+    top: 100px;
+    left: 1290px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 470px;
+}
+
+
+#container12 {
+    position: absolute;
+    top: 100px;
+    right: 200px;
+    margin-top: 470px;
+    margin-right: 450px;
+}
+
+
+#container12 {
+    position: absolute;
+    top: 100px;
+    right: 200px;
+    margin-top: 470px;
 }
 
 
 
+#container13 {
+    position: absolute;
+    top: 100px;
+    right: 350px;
+    margin-top: 470px;
+}
 
 .rectangle {
-    height: 1.2px;
-    width: 1470px;
-    margin-left: 20px;
-    background-color:aliceblue;
     position: absolute;
-    margin-top: 240px;
+    height: 1.2px;
+    width: 1500px;
+    background-color: aliceblue;
+    top: 240px;
+    left: 0;
+    margin-top: 230px;
 }
 
+.rectangle2 {
+    position: absolute;
+    height: 1.2px;
+    width: 1500px;
+    background-color: aliceblue;
+    top: 240px;
+    left: 0;
+    margin-top: 670px;
+}
 
 .vertical_rectangle {
-    height: 200px;
+    height: 350px;
     width: 1.2px;
     background-color: aliceblue;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    margin-top: 280px;
+    margin-top: -85px;
+    margin-left: -150px;
+}
+
+
+.vertical_rectangle2 {
+    height: 600px;
+    width: 1.2px;
+    background-color: aliceblue;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: 95px;
+    margin-left: -90px;
+}
+
+/* This is to edit size and place of pressure chart */
+#chartContainer {
+    position: absolute;
+    width: 600px;
+    height: 300px;
+    margin: 20px;
+    top: 300px;
+    margin-top: 300px;
+    margin-left: 100px;
+}
+
+#chartContainer1 {
+    position: absolute;
+    width: 900px;
+    height: 300px;
+    margin: 20px;
+    top: 300px;
+    left: 800px;
+    margin-top: 250px;
+}
+
+#pressureChartContainer {
+    position: absolute;
+    width: 600px;
+    height: 400px;
+    top: 500px; /* Adjust the top position value to move the chart vertically */
+    left: 200px; /* Adjust the left position value to move the chart horizontally */
 }
 
 
 
 
+#gaugeContainer {
+    width: 200px;
+    height: 200px;
+}
+
+
+.cloud-icon {
+    position: absolute;
+    right: 200px;
+    margin-top: 585px;
+    margin-right: 505px;
+}
+
+
+#cloudy {
+    position: absolute;
+    right: 200px;
+    margin-top: 600px;
+    margin-right: 320px;
+
+}
+
+
+
+
+.gg-sun {
+    font-size: 72px;
+    width: 40px;
+}
+
+
+#sunicon {
+    position: absolute;
+    right: 200px;
+    margin-top: 360px;
+    margin-right: 380px;
+}
+
+
+#sunrise-sunset-container {
+    position: absolute;
+    right: 200px;
+    margin-top: 580px;
+    margin-right: -60px;
+}
+
+.weather-info {
+    display: block;
+    text-align: center;
+    margin-bottom: 10px; /* Adjust the margin as needed */
+}
+
+
+
+#datetime-container {
+    position: absolute;
+    top: -10px;
+    left: 40px;
+    font-size: 20px;
+ 
+}
+
+
+#battery-status {
+    position: absolute;
+    display: flex;
+    top: -10px;
+    left: 60px;
+    align-items: center;
+    margin-top: 24px;
+    margin-left: 210px;
+}
+
+#battery-icon {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    display: flex;
+    top: -10px;
+    margin-left: 230px;
+    align-items: center;
+    margin-top: 20px;
+}
