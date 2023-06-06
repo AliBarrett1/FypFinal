@@ -133,6 +133,35 @@ h2 {
     margin-top: 270px;
 }
 
+
+.wind {
+    position: absolute;
+    margin-top: -100px;
+    font-size: 3rem;
+    animation-name: glow;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    margin-left: 1050px;
+    margin-top: 700px;
+}
+
+
+.rainy {
+    position: absolute;
+    margin-top: -100px;
+    font-size: 3rem;
+    animation-name: glow;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    margin-left: 270px;
+    margin-top: 700px;
+}
+
+
+
+
 @keyframes glow {
     from {
         text-shadow: 0px 0px 5px #fff, 0px 0px 5px #614ad3;
@@ -260,6 +289,16 @@ h2 {
     margin-top: 470px;
 }
 
+
+
+#container14 {
+    position: absolute;
+    top: 100px;
+    right: 350px;
+    margin-top: 900px;
+   
+}
+
 .rectangle {
     position: absolute;
     height: 1.2px;
@@ -315,15 +354,7 @@ h2 {
     margin-left: 100px;
 }
 
-#chartContainer1 {
-    position: absolute;
-    width: 900px;
-    height: 300px;
-    margin: 20px;
-    top: 300px;
-    left: 800px;
-    margin-top: 250px;
-}
+
 
 #pressureChartContainer {
     position: absolute;
@@ -345,7 +376,7 @@ h2 {
 .cloud-icon {
     position: absolute;
     right: 200px;
-    margin-top: 585px;
+    margin-top: 395px;
     margin-right: 505px;
 }
 
@@ -353,7 +384,7 @@ h2 {
 #cloudy {
     position: absolute;
     right: 200px;
-    margin-top: 600px;
+    margin-top: 410px;
     margin-right: 320px;
 
 }
@@ -419,4 +450,59 @@ h2 {
     margin-left: 230px;
     align-items: center;
     margin-top: 20px;
+}
+
+
+
+
+#wind-icon {
+    position: absolute; /* Enable positioning */
+    top: 50%; /* Move the icon vertically */
+  
+    right: 200px;
+    margin-top: 560px;
+    margin-right: 280px;
+}
+
+
+
+.rain-section {
+    position: relative;
+    overflow: hidden;
+    width: 40%;
+    height: 250px; /* Adjust the height as needed */
+    background: transparent; /* Set the background to transparent */
+    margin-top: 750px;
+    margin-left: 30px;
+}
+
+
+.rain {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.raindrop {
+    position: absolute;
+    top: -30px;
+    left: 0;
+    width: 2px;
+    height: 30px;
+    background-color: #fff; /* Adjust the raindrop color as needed */
+    opacity: 0.8;
+    animation: raindrop-fall 2s linear infinite;
+}
+
+@keyframes raindrop-fall {
+    0% {
+        transform: translateY(-30px);
+    }
+
+    100% {
+        transform: translateY(400px);
+    }
 }

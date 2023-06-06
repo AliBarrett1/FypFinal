@@ -83,7 +83,28 @@
 
     <h2 class="barometric">Barometric Pressure</h2>
 
+
+
     <h2 class="feelslike">Feels Like</h2>
+
+    <h2 class="wind">Wind</h2>
+
+    <h2 class="rainy">Rain</h2>
+
+
+
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <i class="fas fa-wind fa-3x" id="wind-icon"></i>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -178,6 +199,9 @@
 
 
 
+    <section class="rain-section">
+        <div class="rain"></div>
+    </section>
 
 
 
@@ -270,6 +294,15 @@
 
 
 
+    <div id="container14">
+        <div id="wind-wrapper">
+            <p>Wind Speed: <span id="wind_speed">...</span></p>
+            <div id="windspeed_gauge"></div>
+        </div>
+    </div>
+
+
+
 
     <div id="chartContainer">
         <canvas id="pressureChart" width="300" height="200"></canvas>
@@ -325,7 +358,7 @@
 
 
 
-   
+
 
 
 
@@ -347,6 +380,7 @@
             drawHeatChart();
             drawWindChart();
             drawThwChart();
+            drawWindspeedlastChart();
         }
 
         function drawTemperatureChart() {
@@ -396,6 +430,12 @@
 
             humidityChart.draw(humidityData, humidityOptions);
         }
+
+
+
+
+
+
 
         function drawPressureChart() {
             var pressureData = google.visualization.arrayToDataTable([
@@ -562,6 +602,27 @@
 
 
 
+        function drawWindspeedlastChart() {
+            var windspeedlastData = google.visualization.arrayToDataTable([
+                ['Label', 'Value'],
+                ['Wind Speed', 0]
+            ]);
+
+            var windspeedlastOptions = { // Change variable name to dewOptions
+                width: 450,
+                height: 160,
+                minorTicks: 5,
+                min: 0,
+                max: 60
+            };
+
+            var windspeedlastChart = new google.visualization.Gauge(document.getElementById('windspeed_gauge'));
+
+            windspeedlastChart.draw(windspeedlastData, windspeedlastOptions); // Use dewOptions variable
+        }
+
+
+
 
 
 
@@ -718,12 +779,15 @@
                         gauge.draw(temperatureGaugeData, options);
                         textElement.textContent = 'Temperature: ' + temperatureCelsius.toFixed(2) + ' °C';
 
+                        // Convert pressure from hPa to inHg
+                        var pressureInHg = pressure * 0.02953;
+
                         var pressureGaugeData = google.visualization.arrayToDataTable([
                             ['Label', 'Value'],
-                            ['Pressure', { v: pressure, f: pressure + ' hPa' }]
+                            ['Pressure', { v: pressureInHg, f: pressureInHg.toFixed(2) + ' inHg' }]
                         ]);
                         gaugePressure.draw(pressureGaugeData, optionsPressure);
-                        textElementPressure.textContent = pressure + ' hPa';
+                        textElementPressure.textContent = pressureInHg.toFixed(2) + ' inHg';
                     })
                     .catch(error => {
                         console.error('Error fetching weather data:', error);
@@ -734,6 +798,11 @@
 
             setInterval(updateData, 180000);
         }
+
+
+
+
+
 
 
     </script>
@@ -748,3 +817,12 @@
 
 </body>
 </html>
+
+
+
+
+
+
+ 
+
+                 

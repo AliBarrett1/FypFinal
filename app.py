@@ -18,7 +18,8 @@ def index():
     heat_chart_url = generate_gauge_chart_url("Heat Index", 900, 1100, 1000)
     wind_chart_url = generate_gauge_chart_url("Wind Chill", 900, 1100, 1000)
     thw_chart_url = generate_gauge_chart_url("THW Index", 900, 1100, 1000)
-    return render_template('index.html', temperature_chart_url=temperature_chart_url, humidity_chart_url=humidity_chart_url, dew_chart_url=dew_chart_url, wet_chart_url=wet_chart_url, heat_chart_url=heat_chart_url,  wind_chart_url=wind_chart_url, thw_chart_url=thw_chart_url)
+    windspeedlast_chart_url = generate_gauge_chart_url("Wind Speed Last", 0, 100, 45)
+    return render_template('index.html', temperature_chart_url=temperature_chart_url, humidity_chart_url=humidity_chart_url, dew_chart_url=dew_chart_url, wet_chart_url=wet_chart_url, heat_chart_url=heat_chart_url,  wind_chart_url=wind_chart_url, thw_chart_url=thw_chart_url, windspeedlast_chart_url=windspeedlast_chart_url)
 
 @app.route('/weather-data', methods=['GET'])
 def get_weather_data():
@@ -37,6 +38,9 @@ def get_weather_data():
 
     # Return the data as plain text
     return formatted_weather_data
+
+
+
 
 @app.route('/historical')
 def historical():
@@ -126,70 +130,3 @@ def update_csv_file():
 # ...
 
 
-import time
-import sqlite3
-import requests
-import datetime
-
-# Connect to the SQLite database
-conn = sqlite3.connect('weather_data.db')
-cursor = conn.cursor()
-
-# Create the weather_data table if it doesn't exist
-cursor.execute('''
-    CREATE TABLE IF NOT EXISTS weather_data (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        timestamp TEXT,
-        inside_temp REAL,
-        inside_humidity REAL,
-        dew_point REAL,
-        wet_bulb REAL,
-        thw_index REAL,
-        heat_index REAL,
-        temperature REAL,
-        pressure REAL
-    )
-''')
-conn.commit()
-
-# Function to update the SQLite database with data from the API
-def update_sqlite_db():
-    # Fetch weather data from the first API endpoint
-    url = 'http://172.16.12.46/v1/current_conditions'
-    response = requests.get(url)
-    weather_data = response.json()
-
-    # Extract the required data from the weather_data JSON
-    inside_temp = weather_data['data']['temp']
-    inside_humidity = weather_data['data']['hum']
-    dew_point = weather_data['data']['dew_point']
-    wet_bulb = weather_data['data']['wet_bulb']
-    thw_index = weather_data['data']['thw_index']
-    heat_index = weather_data['data']['heat_index']
-
-    # Fetch weather data from the second API endpoint
-    url2 = 'https://api.openweathermap.org/data/2.5/weather?lat=2.977007&lon=101.733376&appid=2917ab3f70f94f881d8a1b5dff4039d6'
-    response2 = requests.get(url2)
-    weather_data2 = response2.json()
-
-    # Extract the required data from the weather_data2 JSON
-    temperature = weather_data2['main']['temp']
-    pressure = weather_data2['main']['pressure']
-
-    # Get the current timestamp
-    timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-    # Insert the data into the weather_data table
-    cursor.execute('''
-        INSERT INTO weather_data (timestamp, inside_temp, inside_humidity, dew_point, wet_bulb, thw_index, heat_index, temperature, pressure)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (timestamp, inside_temp, inside_humidity, dew_point, wet_bulb, thw_index, heat_index, temperature, pressure))
-    conn.commit()
-
-# Main loop to update the SQLite database at 1-minute intervals
-while True:
-    update_sqlite_db()
-    time.sleep(60)  # Sleep for 60 seconds (1 minute)
-
-# Close the database connection
-conn.close()

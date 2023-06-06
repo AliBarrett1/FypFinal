@@ -225,6 +225,40 @@ function updateWeatherData() {
 
 
 
+            if (
+                data &&
+                data.data &&
+                data.data.conditions &&
+                Array.isArray(data.data.conditions) &&
+                data.data.conditions.length > 0 &&
+                data.data.conditions[0].hasOwnProperty('wind_speed')
+            ) {
+                const windspeedlast = data.data.conditions[0].wind_speed;
+                console.log('Wind Speed:', windspeedlast);
+                document.getElementById('wind_speed').textContent = windspeedlast;
+
+                // Update the gauge chart based on the dew point
+                var windspeedlastGaugeData = google.visualization.arrayToDataTable([
+                    ['Label', 'Value'],
+                    ['Wind Speed', windspeedlast]
+                ]);
+
+                var windspeedlastGaugeOptions = {
+                    width: 400,
+                    height: 120,
+                    minorTicks: 5,
+                    min: 0,
+                    max: 60
+                };
+
+                var windspeedlastGaugeChart = new google.visualization.Gauge(document.getElementById('windspeed_gauge'));
+                windspeedlastGaugeChart.draw(windspeedlastGaugeData, windspeedlastGaugeOptions);
+            }
+
+
+
+
+
 
             if (
                 data &&
@@ -520,6 +554,20 @@ setInterval(fetchAndUpdatePressureData, 30 * 60 * 1000); // Update the chart eve
 /////////////
 
 
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////
+
+
+
 google.charts.load('current', { 'packages': ['gauge'] });
 google.charts.setOnLoadCallback(drawChart);
 
@@ -565,12 +613,15 @@ function drawChart() {
                 gauge.draw(temperatureGaugeData, options);
                 textElement.textContent = 'Temperature: ' + temperatureCelsius.toFixed(2) + ' °C';
 
+                // Convert pressure from hPa to inHg
+                var pressureInHg = pressure * 0.02953;
+
                 var pressureGaugeData = google.visualization.arrayToDataTable([
                     ['Label', 'Value'],
-                    ['Pressure', { v: pressure, f: pressure + ' hPa' }]
+                    ['Pressure', { v: pressureInHg, f: pressureInHg.toFixed(2) + ' inHg' }]
                 ]);
                 gaugePressure.draw(pressureGaugeData, optionsPressure);
-                textElementPressure.textContent =  pressure + ' hPa';
+                textElementPressure.textContent = pressureInHg.toFixed(2) + ' inHg';
             })
             .catch(error => {
                 console.error('Error fetching weather data:', error);
@@ -639,4 +690,16 @@ setInterval(updateClock, 1000);
 
 
 
+///////////////////////////////////////////////////
 
+function createRaindrop() {
+    const raindrop = document.createElement('div');
+    raindrop.classList.add('raindrop');
+    raindrop.style.left = Math.random() * 100 + '%';
+    raindrop.style.animationDelay = Math.random() * 2 + 's';
+    document.querySelector('.rain').appendChild(raindrop);
+}
+
+for (let i = 0; i < 50; i++) {
+    createRaindrop();
+}
